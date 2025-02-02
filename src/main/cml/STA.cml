@@ -1,4 +1,4 @@
-Domain DataPartnershipConsumer {
+Domain ImagesDiagnosticas {
   domainVisionStatement = " recaudar, procesar y distribuir imágenes médicas y diagnósticos anonimizados a compañías de IA y desarrolladores"
 
   Subdomain CargaDatos {
@@ -26,7 +26,6 @@ Domain DataPartnershipConsumer {
     domainVisionStatement = "definicion y seleccion de planes de los consumidores"
   }
 
-
   Subdomain Busquedas {
     type = CORE_DOMAIN
     domainVisionStatement = "Busqueda, consulta y descarga de estudios"
@@ -48,34 +47,211 @@ Domain DataPartnershipConsumer {
   }
 }
 
+BoundedContext ContextoProcesamientoImagenes implements LimpiezaDatos  {
 
-BoundedContext ContextoSupport implements Infraestructura, Notificationes  {
-
+	Aggregate Imagen {
+		Entity Imagen {
+			aggregateRoot
+			String modalidad
+			- Patologia patologia
+			String regionAnatomica
+			- FormatoImagen formatoImagen
+			String fuente
+			- List<Antecedente> antecedentes
+			Date fecha_ingesta
+			- PacienteId pacienteId
+		}
+		ValueObject Patologia {
+			String nombre
+		}
+		Entity FormatoImagen {
+			String nombre
+			String extension
+		}
+		Entity Antecedente {
+			String nombre
+		}
+		ValueObject PacienteId {
+			String id
+		}
+	}
 }
 
-BoundedContext ContextoPartners implements Pagos, CargaDatos, LimpiezaDatos, ProcesamientoDatos {
+BoundedContext ContextoGestionClientes implements Pagos, Infraestructura {
 
+	Aggregate Cliente {
+		Entity Cliente {
+			aggregateRoot
+			String nombre
+			- MetodoPago metodoPago
+			String pais
+			Date fechaRegistro
+			String telefono
+			String correoElectronico
+			Date fechaExpiracionPlan
+		}
+		
+		ValueObject MetodoPago {
+			String nombre
+		}
+	}
 }
 
-BoundedContext ContextoConsumidores implements Planes, Busquedas, HistorialesClinicos {
+BoundedContext ContextoAlianza implements Pagos, Infraestructura {
 
+	Aggregate Parnertship {
+		Entity Parnertship {
+			aggregateRoot
+			
+			- ProveedorId proveedorId
+			String nombreProveedor
+			- Estado estado
+			Int cantidadDatos
+			- CategoriaImagen categoriaImagen
+			Float valorPagos
+			String frecuenciaPago
+			- List<Pago> pagos
+			Date fechaRegistro
+			Date fechaFin
+		}
+
+		ValueObject Estado {
+			String name
+		}
+
+		ValueObject CategoriaImagen {
+			String name
+		}
+
+		ValueObject ProveedorId {
+			String id
+		}
+		
+		Entity Pago {
+			Float valor
+			Date fecha
+		}
+	}
+}
+
+BoundedContext ContextoSevicioDatosIA implements ProcesamientoDatos, HistorialesClinicos {
+
+	Aggregate ServicioDatos {
+		Entity Dataset {
+			aggregateRoot
+			
+			- ProveedorId clienteId
+			String tipoPlan
+			Date fechaSuscripcion
+			Date fechaVencimiento
+			Boolean permisosSql
+			Boolean nubePrivada
+			- Experto expertoAsignado
+		}
+
+		ValueObject ProveedorId {
+			String id
+		}
+
+		Entity Experto {
+			String name
+		}
+	}
+}
+
+BoundedContext ContextoIngestaDatos implements CargaDatos   {
+
+	Aggregate DatoCrudo {
+		Entity DatoCrudo {
+			aggregateRoot
+			
+			- ClienteId fuenteId
+			String fuente
+			String formato_datos
+			String repositorioDatos
+			Boolean anonimizacionDatos
+			String pipelineIngesta
+			int volumenDatos
+			String frecuenciaIngesta
+			Boolean verificacionDatosSensibles
+			String almacenamientoNube
+			int tiempoProcesamiento
+			String formatoSalida
+		}
+
+		ValueObject ClienteId {
+			String id
+		}
+	}
+}
+
+BoundedContext ContextoDatosClinicos implements Busquedas, HistorialesClinicos, Notificationes {
+
+	Aggregate DatoClinico {
+		Entity DatoClinico {
+			aggregateRoot
+			String modalidad
+			String regionAnatomica
+			String patologiaCondicion
+			String etiquetaNormalAnormal
+			String clasificacionBenignoMmaligno
+			String grupoEdad
+			String generoPaciente
+			String etnicidadPaciente
+			String resolucionImagen
+			String contrasteImagen
+			String formatoImagen
+			String faseExamen
+			- ImagenId imagenId
+		}
+
+		ValueObject ImagenId {
+			String id
+		}
+	}
+}
+
+BoundedContext ContextoSuscripciones implements Planes, Infraestructura, Notificationes {
+	Aggregate Suscripcion {
+		Entity Suscripcion {
+			aggregateRoot
+			
+			- ClienteId clienteId
+			String cliente
+			String planServicio
+			Float facturacion
+			String estadoSuscripcion
+			Boolean renovacionAutomatica
+			Date fechaVencimiento
+			Boolean accesoDatosIA
+			int limitesUso
+			Boolean notificacionPago
+			String tipoCliente
+			String modalidadPago
+		}
+
+		ValueObject ClienteId {
+			String id
+		}
+	}
 }
 
 ContextMap DataPartnershipConsumer {
 	state = AS_IS
 
-	contains ContextoSupport
-	contains ContextoPartners
-	contains ContextoConsumidores
-	
-	/* 
-	 * Tenga en cuenta que dado como el sistema se encuentra se puede asumir un Shared Kernel
-	 * pero si usted pensÃ³ en otro tipo de relaciÃ³n es totalmente vÃ¡lido
-	 */
-	ContextoSupport [U] -> [D] ContextoPartners
+	contains ContextoProcesamientoImagenes
+	contains ContextoGestionClientes
+	contains ContextoSevicioDatosIA
+	contains ContextoAlianza
+	contains ContextoIngestaDatos
+	contains ContextoDatosClinicos
+	contains ContextoSuscripciones
 
-	ContextoConsumidores [D] <- [U] ContextoSupport
-
-	ContextoConsumidores [P] <-> [P] ContextoPartners
+	ContextoAlianza [U] -> [D] ContextoIngestaDatos
+	ContextoProcesamientoImagenes [P] <-> [P] ContextoDatosClinicos
+	ContextoProcesamientoImagenes [U] -> [D] ContextoIngestaDatos
+	ContextoDatosClinicos [U] -> [D] ContextoSevicioDatosIA
+	ContextoSevicioDatosIA [D] <- [U] ContextoGestionClientes
+	ContextoGestionClientes [P] <-> [P] ContextoSuscripciones
 
 }
