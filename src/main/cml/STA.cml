@@ -1,0 +1,80 @@
+Domain DataPartnershipConsumer {
+  domainVisionStatement = " recaudar, procesar y distribuir imágenes médicas y diagnósticos anonimizados a compañías de IA y desarrolladores"
+
+  Subdomain CargaDatos {
+    type = CORE_DOMAIN
+    domainVisionStatement = "Cargar informacion a la nube privada (datos crudos)"
+  }
+
+  Subdomain LimpiezaDatos {
+    type = CORE_DOMAIN
+    domainVisionStatement = "el anonimizado"
+  }
+
+  Subdomain ProcesamientoDatos {
+    type = CORE_DOMAIN
+    domainVisionStatement = "Etiquetado, caracterizacion y agrupacion"
+  }
+
+  Subdomain HistorialesClinicos {
+    type = CORE_DOMAIN
+    domainVisionStatement = "Informacion consolidada"
+  }
+
+  Subdomain Planes {
+    type = SUPPORTING_DOMAIN
+    domainVisionStatement = "definicion y seleccion de planes de los consumidores"
+  }
+
+  Subdomain Busquedas {
+    type = CORE_DOMAIN
+    domainVisionStatement = "Busqueda, consulta y descarga de estudios"
+  }
+
+  Subdomain Notificationes {
+    type = GENERIC_SUBDOMAIN
+    domainVisionStatement = "Correos de creacion de usuario y notificaciones para la descarga"
+  }
+
+  Subdomain Infraestructura {
+    type = SUPPORTING_DOMAIN
+    domainVisionStatement = "Crea ambientes completamente privados en la nube para almacenar los datos"
+  }
+
+  Subdomain Pagos {
+    type = SUPPORTING_DOMAIN
+    domainVisionStatement = "Generar los pagos a los partners"
+  }
+}
+
+
+BoundedContext ContextoSupport implements Infraestructura, Notificationes  {
+
+}
+
+BoundedContext ContextoPartners implements Pagos, CargaDatos, LimpiezaDatos, ProcesamientoDatos {
+
+}
+
+BoundedContext ContextoConsumidores implements Planes, Busquedas, HistorialesClinicos {
+
+}
+
+ContextMap DataPartnershipConsumer {
+	state = AS_IS
+
+	contains ContextoSupport
+	contains ContextoPartners
+	contains ContextoConsumidores
+	
+	/* 
+	 * Tenga en cuenta que dado como el sistema se encuentra se puede asumir un Shared Kernel
+	 * pero si usted pensÃ³ en otro tipo de relaciÃ³n es totalmente vÃ¡lido
+	 */
+	ContextoSupport [U] -> [D] ContextoPartners
+
+	ContextoConsumidores [D] <- [U] ContextoSupport
+
+	ContextoConsumidores [P] <-> [P] ContextoPartners
+
+}
