@@ -1,49 +1,50 @@
 Domain ImagesDiagnosticas {
-  domainVisionStatement = " recaudar, procesar y distribuir imágenes médicas y diagnósticos anonimizados a compañías de IA y desarrolladores"
+  domainVisionStatement = "Recaudar, procesar y distribuir imágenes médicas y diagnósticos anonimizados a compañías de IA y desarrolladores, asegurando la integridad, seguridad y cumplimiento normativo de los datos."
 
   Subdomain CargaDatos {
     type = CORE_DOMAIN
-    domainVisionStatement = "Cargar informacion a la nube privada (datos crudos)"
+    domainVisionStatement = "Facilitar la carga eficiente y segura de datos crudos, garantizando la integridad y disponibilidad de la información para su posterior procesamiento."
   }
 
   Subdomain LimpiezaDatos {
     type = CORE_DOMAIN
-    domainVisionStatement = "el anonimizado"
+    domainVisionStatement = "Implementar procesos robustos de anonimización y depuración de datos médicos, asegurando la protección de la privacidad del paciente y la calidad de los datos para análisis posteriores."
   }
 
   Subdomain ProcesamientoDatos {
     type = CORE_DOMAIN
-    domainVisionStatement = "Etiquetado, caracterizacion y agrupacion"
+    domainVisionStatement = "Realizar el etiquetado, caracterización y agrupación de datos médicos para optimizar su uso en modelos de inteligencia artificial, facilitando el análisis avanzado y la generación de insights clínicos."
   }
 
   Subdomain HistorialesClinicos {
     type = CORE_DOMAIN
-    domainVisionStatement = "Informacion consolidada"
+    domainVisionStatement = "Consolidar y estructurar información clínica relevante, permitiendo una gestión integral del historial del paciente para estudios analíticos y aplicaciones de IA en salud."
   }
 
   Subdomain Planes {
     type = SUPPORTING_DOMAIN
-    domainVisionStatement = "definicion y seleccion de planes de los consumidores"
+    domainVisionStatement = "Definir y gestionar planes de servicio personalizados para los consumidores de datos, optimizando la oferta según las necesidades de investigación."
   }
+
 
   Subdomain Busquedas {
     type = CORE_DOMAIN
-    domainVisionStatement = "Busqueda, consulta y descarga de estudios"
+    domainVisionStatement = "Ofrecer funcionalidades avanzadas de búsqueda, consulta y descarga de estudios médicos, garantizando un acceso rápido, seguro y eficiente a los datos clínicos anonimizados."
   }
 
   Subdomain Notificationes {
     type = GENERIC_SUBDOMAIN
-    domainVisionStatement = "Correos de creacion de usuario y notificaciones para la descarga"
+    domainVisionStatement = "Gestionar la comunicación automatizada mediante correos electrónicos y notificaciones para eventos clave, como la creación de usuarios, actualizaciones de estado y disponibilidad de descargas de datos."
   }
 
   Subdomain Infraestructura {
     type = SUPPORTING_DOMAIN
-    domainVisionStatement = "Crea ambientes completamente privados en la nube para almacenar los datos"
+    domainVisionStatement = "Diseñar y mantener entornos de nube altamente seguros y privados para el almacenamiento y procesamiento de datos médicos."
   }
 
   Subdomain Pagos {
     type = SUPPORTING_DOMAIN
-    domainVisionStatement = "Generar los pagos a los partners"
+    domainVisionStatement = "Gestionar de forma eficiente los procesos de pago a los partners, asegurando la transparencia, trazabilidad y cumplimiento de acuerdos comerciales en la distribución de datos."
   }
 }
 
