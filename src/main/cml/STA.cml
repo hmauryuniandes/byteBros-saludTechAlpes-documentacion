@@ -26,6 +26,7 @@ Domain DataPartnershipConsumer {
     domainVisionStatement = "definicion y seleccion de planes de los consumidores"
   }
 
+
   Subdomain Busquedas {
     type = CORE_DOMAIN
     domainVisionStatement = "Busqueda, consulta y descarga de estudios"
