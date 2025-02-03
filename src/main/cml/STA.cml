@@ -26,7 +26,6 @@ Domain ImagesDiagnosticas {
     domainVisionStatement = "Definir y gestionar planes de servicio personalizados para los consumidores de datos, optimizando la oferta según las necesidades de investigación."
   }
 
-
   Subdomain Busquedas {
     type = CORE_DOMAIN
     domainVisionStatement = "Ofrecer funcionalidades avanzadas de búsqueda, consulta y descarga de estudios médicos, garantizando un acceso rápido, seguro y eficiente a los datos clínicos anonimizados."
